@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_crm_partner_smks_form" model="ir.ui.view">
+        <field name="name">res.partner.smks.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook[last()]" position="inside">
+                <page string="Marketing" name="marketing">
+                    <group>
+                        <group string="Marketing">
+                            <field name="ics_campaign_id" string="Campaign"/>
+                            <field name="ics_source_id" string="Source"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//notebook[last()]" position="inside">
+                <page string="Visit Info" name="visitinfo" attrs="{'invisible':[('company_type','!=', 'company')]}">
+                    <group>
+                        <group>
+                            <field name="ics_day_tags_ids" widget="many2many_tags" string="Cleaning Days"/>
+                            <field name="ics_hrs_per_day" string="Hours Per Day"/>
+                            <field name="ics_cleaning_frequency"/>
+                        </group>
+                        <group>
+                            <field name="ics_total_hrs_per_freq" string="Total Hours Per Frequency"/>
+                            <field name="ics_wage_per_hr" string="Wage Per Hour (£)"/>
+                        </group>
+                        <group>
+                            <field name="ics_hr_notes" string="Hour Notes"/>
+                            <!-- Added ics_cost_per to support email templates for ICS -->
+                            <field name="ics_cost_per"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

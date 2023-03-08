@@ -1,0 +1,209 @@
+<odoo>
+    <!-- overrides base email template with required ICS template -->
+    <data noupdate="0"></data>
+    <function name="write" model="ir.model.data">
+        <function name="search" model="ir.model.data">
+            <value eval="[('name', '=', 'email_template_edi_sale'), ('module', '=', 'sale')]"/>
+        </function>
+        <value eval="{'noupdate': False}"/>
+    </function>
+    <record id="sale.email_template_edi_sale" model="mail.template">
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p>
+                    Dear <t t-out="object.partner_id.name or ''" contenteditable="false" data-oe-t-inline="true"
+                            oe-keep-contenteditable="">Customer</t>,
+                </p>
+                <p style="margin-bottom: 0px;">
+                    Thank you for your recent enquiry for cleaning services.
+                </p>
+                <p></p>
+                Based on the information provided the cost of our services to you will be
+                <strong>
+                    <t t-out="format_amount(object.amount_untaxed,object.pricelist_id.currency_id) or ''"
+                       contenteditable="false" oe-keep-contenteditable="" data-oe-t-inline="true">£10.00
+                    </t>
+                </strong>
+                plus VAT if required, per
+                <strong>
+                    <t t-if="object.partner_id.company_type == 'company'" data-oe-t-group="0"
+                       data-oe-t-group-active="true" data-oe-t-inline="true">
+                        <t t-out="object.partner_id.ics_cost_per or ''" contenteditable="false" data-oe-t-inline="true"
+                           oe-keep-contenteditable="">per month
+                        </t>
+                    </t>
+                    <t t-if="object.partner_id.company_type == 'person'" data-oe-t-group="0"
+                       data-oe-t-group-active="true" data-oe-t-inline="true">
+                        <t t-out="object.partner_id.parent_id.ics_cost_per or ''" contenteditable="false"
+                           data-oe-t-inline="true"
+                           oe-keep-contenteditable="">
+                        </t>
+                    </t>
+                </strong>
+                .
+                <p></p>
+                <p></p>
+                <p style="margin-bottom: 0px;">
+                </p>
+                <ul>
+                    <li>The operative will work
+                        <strong>
+                            <t t-if="object.partner_id.company_type == 'company'" data-oe-t-group="0"
+                               data-oe-t-group-active="true" data-oe-t-inline="true">
+                                <span>(</span>
+                                <span t="" t-foreach="object.partner_id.ics_day_tags_ids" t-as="days"
+                                      data-oe-t-inline="true">
+                                    <span t-field="days.name"></span>
+                                    <span t-if="not days.name == object.partner_id.ics_day_tags_ids[-1].name"
+                                          data-oe-t-group="0" data-oe-t-group-active="true">,
+                                    </span>
+                                </span>
+                                <span>)</span>
+                            </t>
+                            <t t-if="object.partner_id.company_type == 'person'" data-oe-t-group="0"
+                               data-oe-t-group-active="true" data-oe-t-inline="true">
+                                <span>(</span>
+                                <span t="" t-foreach="object.partner_id.parent_id.ics_day_tags_ids" t-as="days"
+                                      data-oe-t-inline="true">
+                                    <span t-field="days.name"></span>
+                                    <span t-if="not days.name == object.partner_id.parent_id.ics_day_tags_ids[-1].name"
+                                          data-oe-t-group="0" data-oe-t-group-active="true">,
+                                    </span>
+                                </span>
+                                <span>)</span>
+                            </t>
+                        </strong>
+                        on a
+                        <strong>
+                            <t t-if="object.partner_id.company_type == 'company'" data-oe-t-group="0"
+                               data-oe-t-group-active="true" data-oe-t-inline="true">
+                                <t t-out="object.partner_id.ics_cleaning_frequency or ''" contenteditable="false"
+                                   data-oe-t-inline="true" oe-keep-contenteditable="">agreed frequency
+                                </t>
+                            </t>
+                            <t t-if="object.partner_id.company_type == 'person'" data-oe-t-group="0"
+                               data-oe-t-group-active="true" data-oe-t-inline="true">
+                                <t t-out="object.partner_id.parent_id.ics_cleaning_frequency or ''"
+                                   contenteditable="false"
+                                   data-oe-t-inline="true" oe-keep-contenteditable="">
+                                </t>
+                            </t>
+                        </strong>
+                        basis at
+                        <strong>
+                            <t t-if="object.partner_id.company_type == 'company'" data-oe-t-group="0"
+                               data-oe-t-group-active="true" data-oe-t-inline="true">
+                                <t t-out="format_amount(object.partner_id.ics_wage_per_hr,object.pricelist_id.currency_id)
+                             or ''"
+                                   contenteditable="false" data-oe-t-inline="true" oe-keep-contenteditable="">per hour
+                                </t>
+                            </t>
+                            <t t-if="object.partner_id.company_type == 'person'" data-oe-t-group="0"
+                               data-oe-t-group-active="true" data-oe-t-inline="true">
+                                <t t-out="format_amount(object.partner_id.parent_id.ics_wage_per_hr,object.pricelist_id.currency_id)
+                             or ''"
+                                   contenteditable="false" data-oe-t-inline="true" oe-keep-contenteditable="">
+                                </t>
+                            </t>
+                        </strong>
+                        per hour.
+                    </li>
+                    <p></p>
+                    <p></p>
+                    <p style="margin-bottom: 0px;">
+                    </p>
+                    <li>We are part of the Living Wage Foundation therefore all ICS operatives are paid a minimum of RLW
+                        -
+                        Real Living Wage.
+                    </li>
+                    <p></p>
+                    <p></p>
+                    <p style="margin-bottom: 0px;">
+                    </p>
+                    <li>Cost includes standard machinery, equipment, materials, quality control audits and
+                        sickness/holiday
+                        cover.
+                    </li>
+                    <p></p>
+                    <p style="margin-bottom: 0px;">
+                    </p>
+                    <li>All operatives will be required to clock in/out via our software using a GEO fence of 150
+                        meters.
+                    </li>
+                    <p></p>
+                    <p style="margin-bottom: 0px;">
+                    </p>
+                </ul>
+                <p style="margin-bottom: 0px;">
+                    Based on Government Living wage increase from April 2023 (9%) all above costs would have a 9%
+                    increase.
+                </p>
+                <p></p>
+                <p style="margin-bottom: 0px;">
+                    <strong>Consumable Costs plus VAT if required:</strong>
+                </p>
+                <p></p>
+                <p style="margin-bottom: 0px;">
+                    Mini Jumbo Toilet Rolls [VC011]
+                </p>
+                <p style="margin-bottom: 0px;">
+                    Standard Toilet Rolls <strong>£13.30</strong> [9121]
+                </p>
+                <p style="margin-bottom: 0px;">
+                    Anti bac soap (5L) <strong>£7.12</strong> [14167]
+                </p>
+                <p style="margin-bottom: 0px;">
+                    Washing up liquid (500ml) <strong>£13.75</strong> [1707]
+                </p>
+                <p style="margin-bottom: 0px;">
+                    C Fold hand towels <strong>£18.65</strong> [DP135]
+                </p>
+                <p style="margin-bottom: 0px;">
+                    Black Sacks (200) <strong>£12.07</strong> [4603]
+                </p>
+                <p style="margin-bottom: 0px;">
+                    Clear sacks (200) <strong>£15.97</strong> [4675]
+                </p>
+                <p style="margin-bottom: 0px;">
+                    Desk Liners (1000) [4606]
+                    <br></br>
+                    <br></br>
+                </p>
+                <p></p>
+                <p style="margin-bottom: 0px;">
+                    We would very much like the opportunity to provide you the service you are expecting.
+                </p>
+                <p></p>
+                <p style="margin-bottom: 0px;">
+                    Please review by selecting the link below and do not hesitate to contact us if you have any
+                    questions.
+                </p>
+                <p></p>
+                <p style="margin-bottom: 0px;">
+                    Your reference is
+                    <strong t-out="object.name or ''" style="box-sizing:border-box;font-weight:bolder;"
+                            contenteditable="false" oe-keep-contenteditable="">(S00052)
+                    </strong>
+                </p>
+                <p></p>
+                <p style="margin-bottom: 0px;">
+                    <br></br>
+                    <t t-out="object.user_id.signature or ''" contenteditable="false" data-oe-t-inline="true"
+                       oe-keep-contenteditable="">-- User
+                        Signature
+                    </t>
+                </p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+            </div>
+        </field>
+    </record>
+    <function name="write" model="ir.model.data">
+        <function name="search" model="ir.model.data">
+            <value eval="[('name', '=', 'email_template_edi_sale'), ('module', '=', 'sale')]"/>
+        </function>
+        <value eval="{'noupdate': True}"/>
+    </function>
+</odoo>

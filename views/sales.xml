@@ -1,0 +1,45 @@
+<odoo>
+    <data>
+        <record id="view_order_form_inherit" model="ir.ui.view">
+            <field name="name">view.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="replace">
+                    <field name="payment_term_id" required="1"/>
+                </xpath>
+                <xpath expr="//field[@name='validity_date']" position="replace">
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="ics_subscription"/>
+                    <field name="ics_contract_id" readonly="1" string="Contract"/>
+                </xpath>
+                <xpath
+                        expr="//notebook/page/field[@name='order_line']/tree/field[@name='product_id']"
+                        position="after">
+                    <!-- Hidden in view as the related field is to allow logic to be applied on start/end dates -->
+                    <field name="ics_subscription" invisible="1"/>
+                    <!-- Attrs allows us to set conditions on fields in the view using a dictionary -->
+                    <!-- {'Field_Name','Operator','Value')]} -->
+                    <field name="ics_line_date_start" attrs="{'invisible':[('ics_subscription','!=','yes')]
+					                                           ,'required':[('ics_subscription','!=','no')]}"/>
+                    <field name="ics_line_date_end" attrs="{'invisible':[('ics_subscription','!=','yes')]}"/>
+                    <field name="ics_auto_price_ok" readonly="1" string="Auto Price"/>
+                </xpath>
+                <xpath expr="//button[@name='action_draft']" position="replace">
+                </xpath>
+                <xpath expr="/form/sheet/notebook/page[@name='customer_signature']" position="replace">
+                    <page string="Customer Signature" name="customer_signature"
+                          attrs="{'invisible': [('require_signature', '=', False), ('signed_by', '=', False),
+                          ('signature', '=', False), ('signed_on', '=', False)]}">
+                        <group>
+                            <field name="signed_by"/>
+                            <field name="signed_on"/>
+                            <field name="signature" widget="image"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

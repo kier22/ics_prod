@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice_document_inherit_ics_sale" inherit_id="account.report_invoice_document">
+        <data>
+            <xpath expr="/t/t/div/table/thead/tr/th[5]" position="replace">
+            </xpath>
+            <xpath expr="/t/t/div/table/tbody/t[3]/tr/t[1]/td[5]" position="replace">
+            </xpath>
+            <xpath expr="//div[hasclass('clearfix')]" position="after">
+                <br/>
+            </xpath>
+        </data>
+    </template>
+</odoo>

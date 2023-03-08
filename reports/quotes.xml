@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_signature_ics_inherit" inherit_id="sale.report_saleorder_document">
+        <data>
+            <xpath expr="//div[@id='informations']" position="replace">
+            </xpath>
+            <xpath expr="//div[@name='signature']" position="replace">
+                <div t-if="doc.signature" class="mt32 ml64 mr4" name="signature">
+                    <br/>
+                    <div class="offset-8">
+                        <strong>Signature</strong>
+                    </div>
+                    <br/>
+                    <div class="offset-8">
+                        <img t-att-src="image_data_uri(doc.signature)" style="max-height: 4cm; max-width: 8cm;"/>
+                    </div>
+                    <div class="offset-8">
+                        <strong>Signed By</strong>
+                        <p t-field="doc.signed_by"/>
+                    </div>
+                    <div class="offset-8">
+                        <strong>Date Signed</strong>
+                    </div>
+                    <div class="offset-8">
+                        <p t-field="doc.signed_on"/>
+                    </div>
+                    <br/>
+                </div>
+            </xpath>
+            <!-- remove tax value column on quote/order layout -->
+            <xpath expr="//td[@name='td_taxes']"
+                   position="replace">
+            </xpath>
+            <!-- remove tax column name on quote/order layout -->
+            <xpath expr="//th[@name='th_taxes']"
+                   position="replace">
+            </xpath>
+        </data>
+    </template>
+</odoo>

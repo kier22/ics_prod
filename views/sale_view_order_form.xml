@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+        <record id="sale_view_order_form_inherit" model="ir.ui.view">
+            <!-- there is a limit to the length of this field -->
+            <field name="name">sale.view.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_draft']" position="replace">
+                </xpath>
+                <xpath expr="/form/header/button[12][@name='action_draft']" position="replace">
+                    <button name="action_draft" string="Set To Quote" type="action" groups="base.group_system"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="group_invoice_vendors" model="contract.contract">
+            <field name="name">Vendor</field>
+        </record>
+    </data>
+</odoo>

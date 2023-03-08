@@ -1,0 +1,93 @@
+<odoo>
+    <data>
+        <record id="contract_customer_form_view_inherit" model="ir.ui.view">
+            <!-- there is a limit to the length of this field -->
+            <field name="name">contract.contract_contract_customer_form_view.inherit</field>
+            <field name="model">contract.contract</field>
+            <field name="inherit_id" ref="contract.contract_contract_customer_form_view"/>
+            <field name="arch" type="xml">
+                <field name="payment_terms_id" invisible="1"/>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="sale_order_id" string="Sales Order" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- contract name sequence
+                <record id="contract.contract_form_view_inherit" model="ir.ui.view">
+                    <field name="name">contract.contract_contract_customer_form_view_inherit</field>
+                    <field name="model">contract.contract</field>
+                    <field name="inherit_id" ref="contract.contract_contract_customer_form_view"/>
+                    <field name="arch" type="xml">
+                        <form string="contracts">
+                           <sheet>
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="name_seq" readonly="1"/>
+                                </h1>
+                            </div>
+                        </sheet>
+                      </form>
+                    </field>
+                </record>
+                -->
+
+
+        <!-- explicit list view definition -->
+        <!--
+            <record model="ir.ui.view" id="ics.list">
+              <field name="name">ics list</field>
+              <field name="model">ics.ics</field>
+              <field name="arch" type="xml">
+                <tree>
+                  <field name="name"/>
+                  <field name="value"/>
+                  <field name="value2"/>
+                </tree>
+              </field>
+            </record>
+        -->
+
+        <!-- actions opening views on models -->
+        <!--
+            <record model="ir.actions.act_window" id="ics.action_window">
+              <field name="name">ics window</field>
+              <field name="res_model">ics.ics</field>
+              <field name="view_mode">tree,form</field>
+            </record>
+        -->
+
+        <!-- server action to the one above -->
+        <!--
+            <record model="ir.actions.server" id="ics.action_server">
+              <field name="name">ics server</field>
+              <field name="model_id" ref="model_ics_ics"/>
+              <field name="state">code</field>
+              <field name="code">
+                action = {
+                  "type": "ir.actions.act_window",
+                  "view_mode": "tree,form",
+                  "res_model": model._name,
+                }
+              </field>
+            </record>
+        -->
+
+        <!-- Top menu item -->
+        <!--
+            <menuitem name="ics" id="ics.menu_root"/>
+        -->
+        <!-- menu categories -->
+        <!--
+            <menuitem name="Menu 1" id="ics.menu_1" parent="ics.menu_root"/>
+            <menuitem name="Menu 2" id="ics.menu_2" parent="ics.menu_root"/>
+        -->
+        <!-- actions -->
+        <!--
+            <menuitem name="List" id="ics.menu_1_list" parent="ics.menu_1"
+                      action="ics.action_window"/>
+            <menuitem name="Server to list" id="ics" parent="ics.menu_2"
+                      action="ics.action_server"/>
+        -->
+    </data>
+</odoo>

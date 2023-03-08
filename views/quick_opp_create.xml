@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record id="quick_create_opp_form_inherit" model="ir.ui.view">
+            <!-- there is a limit to the length of this field -->
+            <field name="name">quick_create_opp_form_inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.quick_create_opportunity_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="string">Existing Customer</attribute>
+                    <attribute name="options">{'no_create_edit': True, 'no_create':True}</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+

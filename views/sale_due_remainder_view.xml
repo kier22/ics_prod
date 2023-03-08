@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="due_date_reminder_inherit" model="ir.ui.view">
+            <field name="name">due.date.reminder.inherit</field>
+            <field name="model">sale.due.remainder</field>
+            <field name="inherit_id" ref="sale_due_date_reminder_app.sale_due_date_remainder_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_due']" position="attributes">
+                    <attribute name="string">Expiry Date</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- tree view for day.tag model -->
+    <record id="ics_day_tags_tree" model="ir.ui.view">
+        <field name="name">day.tag_tree_ics_day_tags_tree</field>
+        <field name="model">day.tag</field>
+        <field name="arch" type="xml">
+            <tree string="Day Tags">
+                <field name="name" />
+                <field
+                    name="day_tag_id"
+                    options="{'no_create': True}"
+                    groups="base.group_multi_company"
+                />
+            </tree>
+        </field>
+    </record>
+
+    <!-- form view for day.tag model -->
+    <record id="ics_day_tags_form" model="ir.ui.view">
+        <field name="name">day.tag_form_ics_day_tags_form</field>
+        <field name="model">day.tag</field>
+        <field name="arch" type="xml">
+            <form string="Day Tags">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <!-- <field name="ics_colour"/> -->
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- action for day.tag model -->
+    <record id="action_tags" model="ir.actions.act_window">
+        <field name="name">Tags</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">day.tag</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create the first day tag!
+            </p>
+        </field>
+    </record>
+
+    <!-- menu item for day.tag model -->
+    <menuitem id="ics_root" name="ICS" web_icon="ics_model,static/description/icon.png"/>
+    <menuitem id="ics_master" name="Master" parent="ics_root"/>
+    <menuitem id="ics_tags" name="Tags" parent="ics_master" action="action_tags" groups="base.group_erp_manager"/>
+</odoo>

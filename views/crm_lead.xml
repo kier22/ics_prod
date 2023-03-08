@@ -1,0 +1,102 @@
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+        <record model="ir.ui.view" id="crm_lead_inherit">
+            <field name="name">crm.lead.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="priority">10</field>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet/notebook/page[3]/group/group[4]//field[4][@name='type']" position="after">
+                    <field name="ics_meeting_count" invisible="1"/>
+                    <field name="calendar_event_count" invisible="1"/>
+                </xpath>
+                <!-- Rename Customer Field -->
+                <xpath expr="/form/sheet/group/group[2]/field[1][@name='partner_id']" position="attributes">
+                    <attribute name="string">Existing Customer</attribute>
+                    <attribute name="options">{'no_create_edit': True, 'no_create':True}</attribute>
+                </xpath>
+                <xpath expr="/form/sheet/notebook/page[3]/group/group[1]/field[1][@name='partner_name']"
+                       position="attributes">
+                    <attribute name="string">Customer Name</attribute>
+                </xpath>
+                <xpath expr="//page[@name='lead']" position="replace">
+                    <page name="lead" string="Extra Information" attrs="{'invisible': [('type', '=', 'lead')]}">
+                        <group>
+                            <group string="Customer Information">
+                                <field name="partner_name"/>
+                                <label for="street_page_lead" string="Address"/>
+                                <div class="o_address_format">
+                                    <field name="street" id="street_page_lead" placeholder="Street..."
+                                           class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="city" placeholder="City" class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State"
+                                           options='{"no_open": True}'/>
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <field name="country_id" placeholder="Country" class="o_address_country"
+                                           options='{"no_open": True, "no_create": True}'/>
+                                </div>
+                                <field name="website" widget="url" placeholder="e.g. https://www.odoo.com"/>
+                                <field name="lang_id" options="{'no_create': True}"/>
+                            </group>
+
+                            <!-- 15/02/23 Visit group will only show when opportunity has no existing customer
+                            selected, this is to assist in the customer onboarding process where Visitor info is
+                            populated through opportunity as a rule of thumb. Users can add this info directly from the
+                            contact ap on existing customers as required -->
+
+                            <group string="Visit Info" attrs="{'invisible':[('partner_id','!=', False)]}">
+                                <field name="ics_day_tags_ids" widget="many2many_tags" string="Cleaning Days"
+                                       attrs="{'invisible':[('partner_id','!=', False)]}"/>
+                                <field name="ics_hrs_per_day" string="Hours Per Day"
+                                       attrs="{'invisible':[('partner_id','!=', False)]}"/>
+                                <field name="ics_cleaning_frequency"
+                                       attrs="{'invisible':[('partner_id','!=', False)]}"/>
+                                <field name="ics_total_hrs_per_freq" string="Total Hours Per Frequency"
+                                       attrs="{'invisible':[('partner_id','!=', False)]}"/>
+                                <field name="ics_wage_per_hr" string="Wage Per Hour (£)"
+                                       attrs="{'invisible':[('partner_id','!=', False)]}"/>
+                                <field name="ics_hr_notes" string="Hour Notes"
+                                       attrs="{'invisible':[('partner_id','!=', False)]}"/>
+                                <!-- Added ics_cost_per to support email templates for ICS -->
+                                <field name="ics_cost_per"
+                                       attrs="{'invisible':[('partner_id','!=', False)]}"/>
+                            </group>
+                            <group class="mt48">
+                                <group string="Contact Information">
+                                    <label for="contact_name_page_lead"/>
+                                    <div class="o_row">
+                                        <field name="contact_name" id="contact_name_page_lead"/>
+                                        <field name="title" placeholder="Title" domain="[]"
+                                               options='{"no_open": True}'/>
+                                    </div>
+                                    <field name="function"/>
+                                    <label for="mobile_page_lead" class="oe_inline"/>
+                                    <div class="o_row o_row_readonly">
+                                        <button name="phone_action_blacklist_remove" class="fa fa-ban text-danger"
+                                                title="This phone number is blacklisted for SMS Marketing. Click to unblacklist."
+                                                type="object" context="{'default_phone': mobile}"
+                                                groups="base.group_user"
+                                                attrs="{'invisible': [('mobile_blacklisted', '=', False)]}"/>
+                                        <field name="mobile" id="mobile_page_lead" widget="phone"/>
+                                    </div>
+                                </group>
+                            </group>
+                            <group string="Marketing">
+                                <field name="campaign_id"/>
+                                <field name="source_id"/>
+                            </group>
+                            <group string="Misc" name="Misc">
+                                <field name="day_open" groups="base.group_no_one"/>
+                                <field name="day_close" groups="base.group_no_one"/>
+                                <field name="referred"/>
+                                <field name="type" invisible="1"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

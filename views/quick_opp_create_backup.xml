@@ -1,0 +1,58 @@
+<odoo>
+    <data>
+        <record id="quick_create_opp_form_inherit" model="ir.ui.view">
+            <!-- there is a limit to the length of this field -->
+            <field name="name">quick_create_opp_form_inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.quick_create_opportunity_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="." position="replace">
+                    <form>
+                        <group>
+                            <!-- Replace Customer Label with Existing Customer label & make field read only -->
+                            <field name="ics_partner_id" widget="res_partner_many2one" string="Existing Customer"
+                                   context="{'res_partner_search_mode': type == 'opportunity' and 'customer' or False,                             'default_name': contact_name or partner_name,                             'default_is_company': type == 'opportunity' and contact_name == False,                             'default_company_name': type == 'opportunity' and partner_name,                             'default_phone': phone,                             'default_email': email_from,                             'default_user_id': user_id,                             'default_team_id': team_id,                             'show_vat': True}" options="{'no_create_edit': True, 'no_create':True}"
+                            />
+                            <field name="name" placeholder="e.g. Product Pricing"/>
+                            <field name="email_from" string="Email"/>
+                            <field name="phone" string="Phone"/>
+                            <label for="expected_revenue"/>
+                            <div class="o_row">
+                                <field name="expected_revenue" class="oe_inline mr-5" widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="priority" class="oe_inline" nolabel="1" widget="priority"/>
+                            </div>
+                            <div class="o_row">
+                                <field name="recurring_revenue" class="oe_inline pr-4" widget="monetary"
+                                       options="{'currency_field': 'company_currency'}"/>
+                                <field name="recurring_plan" class="oe_inline" placeholder="E.g. Monthly"
+                                       attrs="{'required': [('recurring_revenue', '!=', 0)]}"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </div>
+                            <field name="company_currency" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="user_id" invisible="1"/>
+                            <field name="user_company_ids" invisible="1"/>
+                            <field name="team_id" invisible="1"/>
+                            <field name="type" invisible="1"/>
+                            <field name="partner_name" invisible="1"/>
+                            <field name="contact_name" invisible="1"/>
+                            <field name="country_id" invisible="1"/>
+                            <field name="state_id" invisible="1"/>
+                            <field name="city" invisible="1"/>
+                            <field name="street" invisible="1"/>
+                            <field name="street2" invisible="1"/>
+                            <field name="zip" invisible="1"/>
+                            <field name="mobile" invisible="1"/>
+                            <field name="website" invisible="1"/>
+                            <field name="function" invisible="1"/>
+                            <field name="title" invisible="1"/>
+                        </group>
+                    </form>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+

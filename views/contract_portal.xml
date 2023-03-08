@@ -1,0 +1,22 @@
+<!-- update the contract record portal layout -->
+<odoo>
+    <data>
+        <template id="portal_contract_page_inherit"
+                  name="My Contract Inherit"
+                  inherit_id="contract.portal_contract_page">
+            <xpath expr="//span[@t-field='contract.date_end']/.." position="after">
+                <div t-if="contract.create_date" class="row mb-2 mb-sm-1">
+                <div class="col-12 col-sm-4">
+                    <strong>Created Date</strong>
+                </div>
+                <div class="col-12 col-sm-8">
+                    <span
+                            t-field="contract.create_date"
+                            t-options='{"widget": "date"}'
+                    />
+                </div>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

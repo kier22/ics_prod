@@ -1,0 +1,341 @@
+<odoo>
+    <data>
+        <record id="contract_customer_form_view_inherit" model="ir.ui.view">
+            <!-- there is a limit to the length of this field -->
+            <field name="name">contract.contract_contract_customer_form_view.inherit</field>
+            <field name="model">contract.contract</field>
+            <field name="inherit_id" ref="contract.contract_contract_customer_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form" position="attributes">
+                    <attribute name="create">false</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="sale_order_id" string="Sales Order" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='pricelist_id']" position="replace">
+                    <field name="pricelist_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='fiscal_position_id']" position="replace">
+                    <field name="fiscal_position_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='automatic_price']" position="replace">
+                    <field name="automatic_price" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='analytic_tag_ids']" position="replace">
+                    <field name="ics_analytic_tag_ids" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='analytic_account_id']" position="replace">
+                    <field name="ics_analytic_account_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='tag_ids']" position="after">
+                    <field name="to_renew"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="required">False</attribute>
+                </xpath>
+                <xpath expr="//page[@name='recurring_invoice_line']" position="replace">
+                    <page name="recurring_invoice_line" string="Recurring Invoices">
+                        <field
+                                name="contract_line_fixed_ids"
+                                attrs="{'readonly': [('is_terminated','=',True)], 'invisible': [('line_recurrence', '=', True)]}"
+                                widget="section_and_note_one2many"
+                                context="{'default_contract_type': contract_type,
+                                'default_recurring_rule_type': recurring_rule_type,
+                                'default_recurring_invoicing_type': recurring_invoicing_type,
+                                'default_recurring_interval': recurring_interval, 'default_date_start': date_start,
+                                 'default_recurring_next_date': recurring_next_date}"
+                        >
+                            <tree
+                                    decoration-muted="is_canceled"
+                                    decoration-info="create_invoice_visibility and not is_canceled"
+                                    editable="bottom"
+                            >
+                                <control>
+                                    <create string="Add a line"/>
+                                    <create
+                                            string="Add a section"
+                                            context="{'default_display_type': 'line_section'}"
+                                    />
+                                    <create
+                                            string="Add a note"
+                                            context="{'default_display_type': 'line_note'}"
+                                    />
+                                </control>
+                                <field name="display_type" invisible="1"/>
+                                <field name="sequence" widget="handle"/>
+                                <field name="product_id"/>
+                                <field
+                                        name="product_uom_category_id"
+                                        invisible="1"
+                                />
+                                <field name="name" widget="section_and_note_text"/>
+                                <field
+                                        name="analytic_account_id"
+                                        groups="analytic.group_analytic_accounting"
+                                />
+                                <field
+                                        name="analytic_tag_ids"
+                                        widget="many2many_tags"
+                                        groups="analytic.group_analytic_tags"
+                                />
+                                <field name="quantity"/>
+                                <field name="uom_id"/>
+                                <field
+                                        name="automatic_price"
+                                        attrs="{'column_invisible': [('parent.contract_type', '=', 'purchase')]}"
+                                />
+                                <field
+                                        name="price_unit"
+                                        attrs="{'readonly': [('automatic_price', '=', True)]}"
+                                />
+                                <field name="specific_price" invisible="1"/>
+                                <field name="discount" groups="base.group_no_one"/>
+                                <field name="price_subtotal"/>
+                                <field name="recurring_interval" invisible="1"/>
+                                <field name="recurring_rule_type" invisible="1"/>
+                                <field
+                                        name="recurring_invoicing_type"
+                                        invisible="1"
+                                />
+                                <field name="recurring_next_date" invisible="1"/>
+                                <field name="date_start" invisible="1"/>
+                                <field name="date_end"/>
+                                <field
+                                        name="last_date_invoiced"
+                                        groups="base.group_no_one"
+                                />
+                                <field
+                                        name="create_invoice_visibility"
+                                        invisible="1"
+                                />
+                                <field
+                                        name="is_plan_successor_allowed"
+                                        invisible="1"
+                                />
+                                <field name="is_stop_allowed" invisible="1"/>
+                                <field name="is_cancel_allowed" invisible="1"/>
+                                <field name="is_un_cancel_allowed" invisible="1"/>
+                                <field name="is_canceled" invisible="1"/>
+                                <button
+                                        name="action_plan_successor"
+                                        string="Plan Start"
+                                        type="object"
+                                        icon="fa-calendar text-success"
+                                        attrs="{'invisible': [('is_plan_successor_allowed', '=', False)]}"
+                                />
+                                <button
+                                        name="action_stop"
+                                        string="Stop"
+                                        type="object"
+                                        icon="fa-stop text-danger"
+                                        attrs="{'invisible': [('is_stop_allowed', '=', False)]}"
+                                />
+                                <button
+                                        name="cancel"
+                                        string="Cancel"
+                                        type="object"
+                                        icon="fa-ban text-danger"
+                                        confirm="Are you sure you want to cancel this line"
+                                        attrs="{'invisible': [('is_cancel_allowed', '=', False)]}"
+                                />
+                                <button
+                                        name="action_uncancel"
+                                        string="Un-cancel"
+                                        type="object"
+                                        icon="fa-ban text-success"
+                                        attrs="{'invisible': [('is_un_cancel_allowed', '=', False)]}"
+                                />
+                            </tree>
+                        </field>
+                        <field
+                                name="contract_line_ids"
+                                attrs="{'readonly': [('is_terminated','=',True)], 'invisible': [('line_recurrence', '=', False)]}"
+                                widget="section_and_note_one2many"
+                                context="{'default_contract_type': contract_type}"
+                        >
+                            <tree
+                                    decoration-muted="is_canceled"
+                                    decoration-info="create_invoice_visibility and not is_canceled"
+                            >
+                                <control>
+                                    <create string="Add a line"/>
+                                    <create
+                                            string="Add a section"
+                                            context="{'default_display_type': 'line_section'}"
+                                    />
+                                    <create
+                                            string="Add a note"
+                                            context="{'default_display_type': 'line_note'}"
+                                    />
+                                </control>
+                                <field name="display_type" invisible="1"/>
+                                <field name="sequence" widget="handle"/>
+                                <field name="product_id"/>
+                                <field name="name" widget="section_and_note_text"/>
+                                <field
+                                        name="analytic_account_id"
+                                        groups="analytic.group_analytic_accounting"
+                                />
+                                <field
+                                        name="analytic_tag_ids"
+                                        widget="many2many_tags"
+                                        groups="analytic.group_analytic_tags"
+                                />
+                                <field name="quantity"/>
+                                <field name="uom_id"/>
+                                <field
+                                        name="automatic_price"
+                                        attrs="{'column_invisible': [('parent.contract_type', '=', 'purchase')]}"
+                                />
+                                <field
+                                        name="price_unit"
+                                        attrs="{'readonly': [('automatic_price', '=', True)]}"
+                                />
+                                <field name="specific_price" invisible="1"/>
+                                <field name="discount" groups="base.group_no_one"/>
+                                <field name="price_subtotal"/>
+                                <field name="recurring_interval" invisible="1"/>
+                                <field name="recurring_rule_type" invisible="1"/>
+                                <field
+                                        name="recurring_invoicing_type"
+                                        invisible="1"
+                                />
+                                <field name="date_start" required="1"/>
+                                <field name="date_end"/>
+                                <field name="recurring_next_date" required="1"/>
+                                <field
+                                        name="last_date_invoiced"
+                                        groups="base.group_no_one"
+                                />
+                                <field
+                                        name="create_invoice_visibility"
+                                        invisible="1"
+                                />
+                                <field
+                                        name="is_plan_successor_allowed"
+                                        invisible="1"
+                                />
+                                <field
+                                        name="is_stop_plan_successor_allowed"
+                                        invisible="1"
+                                />
+                                <field name="is_stop_allowed" invisible="1"/>
+                                <field name="is_cancel_allowed" invisible="1"/>
+                                <field name="is_un_cancel_allowed" invisible="1"/>
+                                <field name="is_auto_renew" invisible="1"/>
+                                <field name="is_canceled" invisible="1"/>
+                                <field name="state"/>
+                                <field name="ics_obsolete_line"/>
+                                <button
+                                        name="action_plan_successor"
+                                        string="Plan Start"
+                                        type="object"
+                                        icon="fa-calendar text-success"
+                                        attrs="{'invisible': [('is_plan_successor_allowed', '=', False)]}"
+                                />
+                                <button
+                                        name="action_stop_plan_successor"
+                                        string="Stop Plan Successor"
+                                        type="object"
+                                        icon="fa-pause text-muted"
+                                        attrs="{'invisible': [('is_stop_plan_successor_allowed', '=', False)]}"
+                                />
+                                <button
+                                        name="action_stop"
+                                        string="Stop"
+                                        type="object"
+                                        icon="fa-stop text-danger"
+                                        attrs="{'invisible': [('is_stop_allowed', '=', False)]}"
+                                />
+                                <button
+                                        name="cancel"
+                                        string="Cancel"
+                                        type="object"
+                                        icon="fa-ban text-danger"
+                                        confirm="Are you sure you want to cancel this line"
+                                        attrs="{'invisible': [('is_cancel_allowed', '=', False)]}"
+                                />
+                                <button
+                                        name="action_uncancel"
+                                        string="Un-cancel"
+                                        type="object"
+                                        icon="fa-ban text-success"
+                                        attrs="{'invisible': [('is_un_cancel_allowed', '=', False)]}"
+                                />
+                                <button
+                                        name="renew"
+                                        string="Renew"
+                                        type="object"
+                                        icon="fa-fast-forward text-success"
+                                        groups="base.group_no_one"
+                                        attrs="{'invisible': [('is_auto_renew', '=', False)]}"
+                                />
+                            </tree>
+                        </field>
+                        <field name="note"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Hide Create button on Contract Main Menu, reason is that contracts should only be created from an SO -->
+        <record id="contract_tree_view_inherit" model="ir.ui.view">
+            <!-- there is a limit to the length of this field -->
+            <field name="name">contract_tree_view.inherit</field>
+            <field name="model">contract.contract</field>
+            <field name="inherit_id" ref="contract.contract_contract_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="/tree" position="attributes">
+                    <attribute name="create">false</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!-- SEARCH -->
+        <record id="contract_contract_search_inherit" model="ir.ui.view">
+            <!-- there is a limit to the length of this field -->
+            <field name="name">contract_contract_search_inherit</field>
+            <field name="model">contract.contract</field>
+            <field name="inherit_id" ref="contract.contract_contract_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='finished']" position="after">
+
+                    <filter
+                            name="renew"
+                            string="To Renew"
+                            domain="[('contract_line_ids.date_end', '&lt;', context_today().strftime('%Y-%m-%d')), ('contract_line_ids.manual_renew_needed', '=', True)]"
+                    />
+
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="abstract_contract_line_form_inherit" model="ir.ui.view">
+            <!-- there is a limit to the length of this field -->
+            <field name="name">abstract_contract_line_form_inherit</field>
+            <field name="model">contract.abstract.contract.line</field>
+            <field name="inherit_id" ref="contract.contract_abstract_contract_line_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='automatic_price']" position="after">
+                    <field name="ics_automatic_price" string="ICS Auto-Price"/>
+                    <field name="ics_price_unit" string="ics unit price" invisible="1"/>
+                    <field name="ics_obsolete_line"/>
+                </xpath>
+                <xpath expr="//field[@name='price_unit']" position="replace">
+                    <field
+                            colspan="2"
+                            name="price_unit"
+                            attrs="{'readonly': [('ics_automatic_price', '=', True)]}"
+                    />
+
+                </xpath>
+                <xpath expr="//field[@name='automatic_price']" position="replace">
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
